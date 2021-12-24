@@ -1,0 +1,1 @@
+# Neu chon thang khong co du lieu se bi loi
