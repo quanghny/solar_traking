@@ -1,0 +1,12 @@
+extends ./layouts/layout
+block name 
+    title= name
+block title   
+    h1 Hour
+block input
+    input(type="datetime-local" id="hour" class="time")
+block chart-current 
+    .content-chart-left
+        include ./includes/show-current.pug
+block script 
+    script(type='module' src="js/hour.js") 

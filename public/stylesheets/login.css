@@ -1,0 +1,75 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+.login {
+	display: flex;
+	align-items: center;
+	background-color: #f2f6ff;
+	width: 100vw;
+	height: 100vh;
+}
+.login .container {
+	width: 50rem;
+	height: 40rem;
+	margin: auto;
+	padding: 4rem;
+	background-color: #fff;
+	border-radius: 1rem;
+	box-shadow: 0 0 5px 0 #a29d9d;
+}
+@media screen and (max-width: 576px) {
+	.login .container {
+		height: 100%;
+	}
+}
+.login .title {
+	text-align: center;
+	color: #31507d;
+	font-size: 3rem;
+}
+.login .desc {
+	text-align: center;
+	margin: 1rem 0 5rem;
+	color: #acb8cb;
+}
+.login .input-group {
+	position: relative;
+	margin-bottom: 2.4rem;
+}
+.login .input-group i {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #267fff;
+	padding-left: 2rem;
+}
+.login input {
+	width: 100%;
+	padding: 0.8rem;
+	padding-left: 5rem;
+	border: 1px solid #f3f8ff;
+	border-radius: 0.5rem;
+}
+.login input::placeholder {
+	color: #3e5b85;
+	opacity: 0.8;
+}
+.login .btn-login {
+	width: 100%;
+	padding: 1rem 0;
+	border-radius: 0.5rem;
+	border: none;
+	color: #fff;
+	background-color: #267fff;
+	cursor: pointer;
+}
+.login .btn-login:hover {
+	opacity: 0.7;
+}
+.messageWrong {
+	color: red;
+	text-align: center;
+	margin-top: 1rem;
+}

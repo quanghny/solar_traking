@@ -1,0 +1,9 @@
+extends ./layouts/layout
+block name 
+    title= name
+block title   
+    h1 Month
+block input
+    input(type="month" id="month" class="time")
+block script 
+    script(type='module' src="js/month.js") 

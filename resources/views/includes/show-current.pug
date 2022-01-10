@@ -1,0 +1,39 @@
+.box
+    .volt-wrapper
+        .outer
+            .inner
+                .number.volt-number
+                    span#volt-value 65
+                    | V
+        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+            defs
+                lineargradient#VoltGradientColor
+                    stop(offset='0%', stop-color='#906fd9')
+                    stop(offset='100%', stop-color='#E56BC3')
+            circle(cx='75', cy='75', r='65', stroke-linecap='round')
+        block table-volt
+    .amp-wrapper
+        .outer
+            .inner
+                .number.amp-number
+                    span#amp-value 65
+                    | A
+        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+            defs
+                lineargradient#AmpGradientColor
+                    stop(offset='0%', stop-color='#f74646')
+                    stop(offset='100%', stop-color='#DA3C77')
+            circle(cx='75', cy='75', r='65', stroke-linecap='round')
+    .power-wrapper
+        .outer
+            .inner
+                .number.power-number
+                    span#power-value 65
+                    | W
+        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+            defs
+                lineargradient#PowerGradientColor
+                    stop(offset='0%', stop-color='#FC9F5D')
+                    stop(offset='100%', stop-color='#FFE9D0')
+            circle(cx='75', cy='75', r='65', stroke-linecap='round')
+script(src="/js/currentValue.js ") 

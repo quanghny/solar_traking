@@ -1,0 +1,117 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+            rel="stylesheet")
+
+        script(
+            src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"
+            integrity="sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw=="
+            crossorigin="anonymous" 
+            referrerpolicy="no-referrer")  
+
+        title Dash Board 
+    body    
+        include layouts/sidebar
+        .box.table
+            h1 Dash Board 
+            .volt-wrapper
+                .outer
+                    .inner
+                        .number.volt-number
+                            span#volt-value 65
+                            | V
+                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                        defs
+                            lineargradient#VoltGradientColor
+                                stop(offset='0%', stop-color='#906fd9')
+                                stop(offset='100%', stop-color='#E56BC3')
+                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                table
+                    thead 
+                        th Time
+                        th.min Min 
+                        th.max Max
+                    tbody#tbody-volt
+                        tr
+                            td.hour Hour
+                            td 13:3 - 1V
+                            td 13:20 - 6V
+                        tr
+                            td.day Day
+                            td 13 - 200V
+                            td 9 - 300V
+                        tr
+                            td.month Month
+                            td 3/7 - 1000V
+                            td 9/7 - 1200V         
+            .amp-wrapper
+                .outer
+                    .inner
+                        .number.amp-number
+                            span#amp-value 65
+                            | A
+                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                        defs
+                            lineargradient#AmpGradientColor
+                                stop(offset='0%', stop-color='#f74646')
+                                stop(offset='100%', stop-color='#DA3C77')
+                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                table 
+                    thead 
+                        th Time
+                        th Min 
+                        th Max
+                    tbody#tbody-amp
+                        tr
+                            td.hour Hour
+                            td 13:3 - 1A
+                            td 13:20 - 6A
+                        tr
+                            td.day Day
+                            td 13 - 200A
+                            td 9 - 300A
+                        tr
+                            td.month Month
+                            td 3/7 - 1000A
+                            td 9/7 - 1200A
+            .power-wrapper
+                .outer
+                    .inner
+                        .number.power-number
+                            span#power-value 65
+                            | W
+                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                        defs
+                            lineargradient#PowerGradientColor
+                                stop(offset='0%', stop-color='#FC9F5D')
+                                stop(offset='100%', stop-color='#FFE9D0')
+                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                table 
+                    thead 
+                        th Time
+                        th Min 
+                        th Max
+                    tbody#tbody-power
+                        tr
+                            td.hour Hour
+                            td 13:3 - 1W
+                            td 13:20 - 6W
+                        tr
+                            td.day Day
+                            td 13 - 200W
+                            td 9 - 300W
+                        tr
+                            td.month Month
+                            td 3/7 - 1000W
+                            td 9/7 - 1200W
+        script(src="/js/currentValue.js ") 
+        script(src="/js/sidebar.js") 
+        script(type='module' src='js/dashboard.js')
+
+
+    

@@ -1,0 +1,9 @@
+extends ./layouts/layout
+block name 
+    title= name
+block title   
+    h1 Day
+block input   
+    input(type="date" id="date" class="time")
+block script 
+    script(type='module' src="js/day.js") 
