@@ -20,18 +20,19 @@ html(lang="en")
         .box.table
             h1 Dash Board 
             .volt-wrapper
-                h2 Voltage
-                .outer
-                    .inner
-                        .number.volt-number
-                            span#volt-value 65
-                            | V
-                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
-                        defs
-                            lineargradient#VoltGradientColor
-                                stop(offset='0%', stop-color='#906fd9')
-                                stop(offset='100%', stop-color='#E56BC3')
-                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                .block
+                    h2 Voltage
+                    .outer
+                        .inner
+                            .number.volt-number
+                                span#volt-value 65
+                                | V
+                        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                            defs
+                                lineargradient#VoltGradientColor
+                                    stop(offset='0%', stop-color='#906fd9')
+                                    stop(offset='100%', stop-color='#E56BC3')
+                            circle(cx='75', cy='75', r='65', stroke-linecap='round')
                 table
                     thead 
                         th Time
@@ -51,18 +52,19 @@ html(lang="en")
                             td 3/7 - 1000V
                             td 9/7 - 1200V         
             .amp-wrapper
-                h2 Ampe
-                .outer
-                    .inner
-                        .number.amp-number
-                            span#amp-value 65
-                            | A
-                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
-                        defs
-                            lineargradient#AmpGradientColor
-                                stop(offset='0%', stop-color='#f74646')
-                                stop(offset='100%', stop-color='#DA3C77')
-                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                .block
+                    h2 Ampe
+                    .outer
+                        .inner
+                            .number.amp-number
+                                span#amp-value 65
+                                | A
+                        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                            defs
+                                lineargradient#AmpGradientColor
+                                    stop(offset='0%', stop-color='#f74646')
+                                    stop(offset='100%', stop-color='#DA3C77')
+                            circle(cx='75', cy='75', r='65', stroke-linecap='round')
                 table 
                     thead 
                         th Time
@@ -82,18 +84,19 @@ html(lang="en")
                             td 3/7 - 1000A
                             td 9/7 - 1200A
             .power-wrapper
-                h2 Power
-                .outer
-                    .inner
-                        .number.power-number
-                            span#power-value 65
-                            | W
-                    svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
-                        defs
-                            lineargradient#PowerGradientColor
-                                stop(offset='0%', stop-color='#FC9F5D')
-                                stop(offset='100%', stop-color='#FFE9D0')
-                        circle(cx='75', cy='75', r='65', stroke-linecap='round')
+                .block
+                    h2 Power
+                    .outer
+                        .inner
+                            .number.power-number
+                                span#power-value 65
+                                | W
+                        svg(xmlns='http://www.w3.org/2000/svg', version='1.1')
+                            defs
+                                lineargradient#PowerGradientColor
+                                    stop(offset='0%', stop-color='#FC9F5D')
+                                    stop(offset='100%', stop-color='#FFE9D0')
+                            circle(cx='75', cy='75', r='65', stroke-linecap='round')
                 table 
                     thead 
                         th Time

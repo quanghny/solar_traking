@@ -3,6 +3,11 @@
  *  11 - 20 :150deg
  *  21 - 30 :250deg
  *  31 - 40 :350deg
+ * 
+ * 0-0.3
+ * 0.31-0.6
+ * 0.61-0.9
+ * 0.91
  */
 
 function currentVolt(val) {
@@ -70,25 +75,25 @@ function currentAmp(val) {
 	const value = parseFloat(val);
 	const run = document.querySelector('.amp-wrapper circle');
 	amp.innerHTML = val;
-	if (value <= 10 && value >= 0) {
+	if (value <= 0.3 && value >= 0) {
 		Object.assign(run.style, {
 			transition: 'stroke-dashoffset 0.3s',
 			'stroke-dashoffset': '375px',
 		});
 	}
-	if (value <= 20 && value >= 11) {
+	if (value <= 0.6 && value > 0.3) {
 		Object.assign(run.style, {
 			transition: 'stroke-dashoffset 0.3s',
 			'stroke-dashoffset': '250px',
 		});
 	}
-	if (value <= 30 && value >= 21) {
+	if (value <= 0.9 && value > 0.6) {
 		Object.assign(run.style, {
 			transition: 'stroke-dashoffset 0.3s',
 			'stroke-dashoffset': '175px',
 		});
 	}
-	if (value >= 31) {
+	if (value > 0.9) {
 		Object.assign(run.style, {
 			transition: 'stroke-dashoffset 0.3s',
 			'stroke-dashoffset': '50px',

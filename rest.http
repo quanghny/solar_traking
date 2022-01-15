@@ -1,9 +1,9 @@
-POST https://doantnbk.herokuapp.com/api
+POST http://localhost:3000/api
 Content-Type: application/json
 
 {
-    "volt":"312",
-    "amp":"0.000001"
+    "volt":"21",
+    "amp":"0.7"
 }
 
 ###
@@ -19,8 +19,8 @@ DELETE  http://localhost:3000/api/delete
 Content-Type: application/json
 
 {
-    "startDay": "2021-11-07 00:00:" ,
-    "endDay": "2021-11-09 00:00:" 
+    "startDay": "2022-1-14 00:00:" ,
+    "endDay": "2022-1-16 00:00:" 
 }
 
 ###
