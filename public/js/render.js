@@ -177,7 +177,7 @@ function renderChart(arr) {
 						display: false,
 						borderWidth: 0,
 					},
-          max:25,
+          // max:25,
 					min: 0,
 
 					ticks: {
@@ -198,7 +198,7 @@ function renderChart(arr) {
 						},
 					},
 					min: 0,
-          max:1,
+          // max:1,
 
 					grid: {
 						display: false,
