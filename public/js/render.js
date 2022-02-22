@@ -186,7 +186,7 @@ function renderChart(arr) {
 							return value + ' (V)';
 						},
 					},
-					// grace: '100px',
+					grace: '5%',
 				},
 				amp: {
 					type: 'linear',
@@ -204,7 +204,8 @@ function renderChart(arr) {
 						display: false,
 						borderWidth: 0,
 					},
-					// grace: '100px',
+          grace: '5%', 
+          // grace: '100px',
 				},
 				power: {
 					type: 'linear',
@@ -222,6 +223,7 @@ function renderChart(arr) {
 						borderWidth: 0,
 					},
 					// grace: '100px',
+          grace: '5%',
 				},
 			},
 		},

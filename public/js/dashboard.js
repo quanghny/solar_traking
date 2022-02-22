@@ -15,7 +15,7 @@ async function getData() {
 		},
 	});
 	//------------------
-	const currentDate = new Date(time).getTime();
+	const currentDate = new Date(time).setHours(0,0,0,0);
 	const nextDate = currentDate + 24 * 60 * 60 * 1000;
 	const res_2 = axios({
 		method: 'post',
