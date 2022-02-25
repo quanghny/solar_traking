@@ -15,7 +15,7 @@ async function getData() {
 		},
 	});
 	//------------------
-	const currentDate = new Date(time).setHours(0,0,0,0);
+	const currentDate = new Date(time).setHours(0, 0, 0, 0);
 	const nextDate = currentDate + 24 * 60 * 60 * 1000;
 	const res_2 = axios({
 		method: 'post',
@@ -74,6 +74,7 @@ async function getData() {
 
 	//Day
 	const dayData = await res_2;
+	console.log(dayData);
 	//--------------------
 
 	const pureArr = dayData.data;
@@ -82,7 +83,6 @@ async function getData() {
 	const resultDayAmp = getValueMinMax(arrDay, 'amp');
 	const resultDayVolt = getValueMinMax(arrDay, 'volt');
 	const resultDayPower = getPowerMinMax(arrDay);
-	//Day
 
 	//month
 	const monthData = await res_3;
@@ -311,9 +311,10 @@ function getValueMinMax(arr, param) {
 	const arrHourInDay = [];
 	const arrTotal = arr.map((item) => {
 		arrHourInDay.push(new Date(item[0].createdAt));
-		return item.reduce((total, cur) => {
+		let result = item.reduce((total, cur) => {
 			return total + cur[param];
 		}, 0);
+		return result / item.length;
 	});
 	const arrSortTotal = arrTotal.sort((a, b) => a - b);
 	const min = arrSortTotal[0];
@@ -330,17 +331,19 @@ function getPowerMinMax(arr) {
 	const arrHourInDay = [];
 	const arrTotal = arr.map((item) => {
 		arrHourInDay.push(new Date(item[0].createdAt));
-		return item.reduce((total, cur) => {
+		let result = item.reduce((total, cur) => {
 			return total + cur.volt * cur.amp;
 		}, 0);
+		result /= item.length;
+		return result;
 	});
 	const arrSortTotal = arrTotal.sort((a, b) => a - b);
 	const min = arrSortTotal[0];
 	const max = arrSortTotal[arrSortTotal.length - 1];
-	const resultMin = arrTotal.findIndex((item) => min === item);
-	const resultMax = arrTotal.findIndex((item) => max === item);
+	const indexMin = arrTotal.findIndex((item) => min === item);
+	const indexMax = arrTotal.findIndex((item) => max === item);
 	return {
-		min: [min, arrHourInDay[resultMin]],
-		max: [max, arrHourInDay[resultMax]],
+		min: [min, arrHourInDay[indexMin]],
+		max: [max, arrHourInDay[indexMax]],
 	};
 }
