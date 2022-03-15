@@ -41,9 +41,9 @@ async function getData() {
 
 	const hourData = await res_1;
 	//--------------------
-	const arrHourAmp = hourData.data.sort((a, b) => a.amp - b.amp);
-	const arrHourVolt = hourData.data.sort((a, b) => a.volt - b.volt);
-	const arrPower = hourData.data.map((item) => {
+	const arrHourAmp = [...hourData.data].sort((a, b) => a.amp - b.amp);
+	const arrHourVolt = [...hourData.data].sort((a, b) => a.volt - b.volt);
+	const arrPower = [...hourData.data].map((item) => {
 		return { value: item.volt * item.amp, time: item.createdAt };
 	});
 	const arrHourPower = arrPower.sort((a, b) => a.value - b.value);
@@ -308,42 +308,45 @@ function formatTime(value) {
 }
 
 function getValueMinMax(arr, param) {
-	const arrHourInDay = [];
 	const arrTotal = arr.map((item) => {
-		arrHourInDay.push(new Date(item[0].createdAt));
 		let result = item.reduce((total, cur) => {
 			return total + cur[param];
 		}, 0);
-		return result / item.length;
+		result = result / item.length;
+		return {
+			result,
+			date: new Date(item[0].createdAt),
+		};
 	});
-	const arrSortTotal = arrTotal.sort((a, b) => a - b);
-	const min = arrSortTotal[0];
-	const max = arrSortTotal[arrSortTotal.length - 1];
-	const resultMin = arrTotal.findIndex((item) => min === item);
-	const resultMax = arrTotal.findIndex((item) => max === item);
+	const arrSortTotal = [...arrTotal].sort((a, b) => a.result - b.result);
+
 	return {
-		min: [min, arrHourInDay[resultMin]],
-		max: [max, arrHourInDay[resultMax]],
+		min: [arrSortTotal[0].result, arrSortTotal[0].date],
+		max: [
+			arrSortTotal[arrSortTotal.length - 1].result,
+			arrSortTotal[arrSortTotal.length - 1].date,
+		],
 	};
 }
 
 function getPowerMinMax(arr) {
-	const arrHourInDay = [];
 	const arrTotal = arr.map((item) => {
-		arrHourInDay.push(new Date(item[0].createdAt));
 		let result = item.reduce((total, cur) => {
 			return total + cur.volt * cur.amp;
 		}, 0);
 		result /= item.length;
-		return result;
+		return {
+			result,
+			date: new Date(item[0].createdAt),
+		};
 	});
-	const arrSortTotal = arrTotal.sort((a, b) => a - b);
-	const min = arrSortTotal[0];
-	const max = arrSortTotal[arrSortTotal.length - 1];
-	const indexMin = arrTotal.findIndex((item) => min === item);
-	const indexMax = arrTotal.findIndex((item) => max === item);
+	const arrSortTotal = [...arrTotal].sort((a, b) => a.result - b.result);
+
 	return {
-		min: [min, arrHourInDay[indexMin]],
-		max: [max, arrHourInDay[indexMax]],
+		min: [arrSortTotal[0].result, arrSortTotal[0].date],
+		max: [
+			arrSortTotal[arrSortTotal.length - 1].result,
+			arrSortTotal[arrSortTotal.length - 1].date,
+		],
 	};
 }
