@@ -66,7 +66,12 @@ class Solar {
 						$lt: nextDate,
 					},
 				},
-				{ _id: 0, createdAt: 1, volt: 1, amp: 1 }
+				{ _id: 0, createdAt: 1, volt: 1, amp: 1 },
+        {
+					sort: {
+						createdAt: 1,
+					},
+				} 
 			).lean();
 			res.json(data); //if no data then return []
 		} catch (error) {
@@ -86,7 +91,12 @@ class Solar {
 						$lt: nextHour,
 					},
 				},
-				{ _id: 0, createdAt: 1, volt: 1, amp: 1 }
+				{ _id: 0, createdAt: 1, volt: 1, amp: 1 },
+        {
+					sort: {
+						createdAt: 1,
+					},
+				} 
 			).lean();
 			res.json(data);
 		} catch (error) {
@@ -105,7 +115,12 @@ class Solar {
 						$lt: new Date(nextMonth).getTime(),
 					},
 				},
-				{ _id: 0, createdAt: 1, volt: 1, amp: 1 }
+				{ _id: 0, createdAt: 1, volt: 1, amp: 1 },
+        {
+					sort: {
+						createdAt: 1,
+					},
+				} 
 			).lean();
 			res.json(data);
 		} catch (error) {
