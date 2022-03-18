@@ -1,5 +1,5 @@
-import { sliceDay } from './sliceTime.js';
-import { renderChart, calculateMonthValue } from './render.js';
+import { sliceDay,hourInDay } from './sliceTime.js';
+import { renderChart, calculateMonthValue,calculateMonth } from './render.js';
 import toggleYAxis from './toggleValue.js';
 
 const btn_volt = document.getElementById('btn-volt');
@@ -36,7 +36,7 @@ async function getCurrentMonth(time) {
 		const pureArr = month.data;
 		const cloneArr = JSON.parse(JSON.stringify(pureArr));
 		const arrDay = sliceDay(cloneArr, pureArr);
-		const arr = calculateMonthValue(arrDay);
+		const arr = calculateMonth(hourInDay(arrDay));
 		const myChart = renderChart(arr);
 		configChart(myChart);
 	}

@@ -1,101 +1,100 @@
-import { sliceHour, sliceDay } from './sliceTime.js';
+import { sliceHour, sliceDay, hourInDay } from './sliceTime.js';
+import { calculateMonth, calculateDayValue } from './render.js';
 
 async function getData() {
-	const res = await axios.get('/api/current-time');
-	const time = res.data.createdAt;
-	// Hour
-	const currentHour = new Date(time).setMinutes(0, 0, 0);
-	const nextHour = currentHour + 60 * 60 * 1000;
-	const res_1 = axios({
-		method: 'post',
-		url: '/api/hour',
-		data: {
-			currentHour,
-			nextHour,
-		},
-	});
-	//------------------
-	const currentDate = new Date(time).setHours(0, 0, 0, 0);
-	const nextDate = currentDate + 24 * 60 * 60 * 1000;
-	const res_2 = axios({
-		method: 'post',
-		url: '/api/date',
-		data: {
-			currentDate,
-			nextDate,
-		},
-	});
-	//--------------------
-	const currentMonth = new Date(time).getMonth() + 1;
-	const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-	let year = new Date(time).getFullYear();
-	let year_nextMonth = currentMonth === 12 ? year + 1 : year;
-	const res_3 = axios({
-		method: 'post',
-		url: '/api/month',
-		data: {
-			currentMonth: `${year}-${currentMonth}-1 0:`,
-			nextMonth: `${year_nextMonth}-${nextMonth}-1 0:`,
-		},
-	});
+  const res = await axios.get('/api/current-time');
+  const time = res.data.createdAt;
+  // Hour
+  const currentHour = new Date(time).setMinutes(0, 0, 0);
+  const nextHour = currentHour + 60 * 60 * 1000;
+  const res_1 = axios({
+    method: 'post',
+    url: '/api/hour',
+    data: {
+      currentHour,
+      nextHour,
+    },
+  });
+  //------------------
+  const currentDate = new Date(time).setHours(0, 0, 0, 0);
+  const nextDate = currentDate + 24 * 60 * 60 * 1000;
+  const res_2 = axios({
+    method: 'post',
+    url: '/api/date',
+    data: {
+      currentDate,
+      nextDate,
+    },
+  });
+  //--------------------
+  const currentMonth = new Date(time).getMonth() + 1;
+  const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+  let year = new Date(time).getFullYear();
+  let year_nextMonth = currentMonth === 12 ? year + 1 : year;
+  const res_3 = axios({
+    method: 'post',
+    url: '/api/month',
+    data: {
+      currentMonth: `${year}-${currentMonth}-1 0:`,
+      nextMonth: `${year_nextMonth}-${nextMonth}-1 0:`,
+    },
+  });
 
-	const hourData = await res_1;
-	//--------------------
-	const arrHourAmp = [...hourData.data].sort((a, b) => a.amp - b.amp);
-	const arrHourVolt = [...hourData.data].sort((a, b) => a.volt - b.volt);
-	const arrPower = [...hourData.data].map((item) => {
-		return { value: item.volt * item.amp, time: item.createdAt };
-	});
-	const arrHourPower = arrPower.sort((a, b) => a.value - b.value);
+  const hourData = await res_1;
+  //--------------------
+  const arrHourAmp = [...hourData.data].sort((a, b) => a.amp - b.amp);
+  const arrHourVolt = [...hourData.data].sort((a, b) => a.volt - b.volt);
+  const arrPower = [...hourData.data].map((item) => {
+    return { value: item.volt * item.amp, time: item.createdAt };
+  });
+  const arrHourPower = arrPower.sort((a, b) => a.value - b.value);
 
-	const resultHourAmp = {
-		min: [arrHourAmp[0].amp, arrHourAmp[0].createdAt],
-		max: [
-			arrHourAmp[arrHourAmp.length - 1].amp,
-			arrHourAmp[arrHourAmp.length - 1].createdAt,
-		],
-	};
+  const resultHourAmp = {
+    min: [arrHourAmp[0].amp, arrHourAmp[0].createdAt],
+    max: [
+      arrHourAmp[arrHourAmp.length - 1].amp,
+      arrHourAmp[arrHourAmp.length - 1].createdAt,
+    ],
+  };
 
-	const resultHourVolt = {
-		min: [arrHourVolt[0].volt, arrHourVolt[0].createdAt],
-		max: [
-			arrHourVolt[arrHourVolt.length - 1].volt,
-			arrHourVolt[arrHourVolt.length - 1].createdAt,
-		],
-	};
-	const resultHourPower = {
-		min: [arrHourPower[0].value, arrHourPower[0].time],
-		max: [
-			arrHourPower[arrHourPower.length - 1].value,
-			arrHourPower[arrHourPower.length - 1].time,
-		],
-	};
-	// Hour
+  const resultHourVolt = {
+    min: [arrHourVolt[0].volt, arrHourVolt[0].createdAt],
+    max: [
+      arrHourVolt[arrHourVolt.length - 1].volt,
+      arrHourVolt[arrHourVolt.length - 1].createdAt,
+    ],
+  };
+  const resultHourPower = {
+    min: [arrHourPower[0].value, arrHourPower[0].time],
+    max: [
+      arrHourPower[arrHourPower.length - 1].value,
+      arrHourPower[arrHourPower.length - 1].time,
+    ],
+  };
+  // Hour
 
-	//Day
-	const dayData = await res_2;
-	console.log(dayData);
-	//--------------------
+  //Day
+  const dayData = await res_2;
+  // console.log(dayData);
+  //--------------------
 
-	const pureArr = dayData.data;
-	const cloneArr = JSON.parse(JSON.stringify(pureArr));
-	const arrDay = sliceHour(cloneArr, pureArr);
-	const resultDayAmp = getValueMinMax(arrDay, 'amp');
-	const resultDayVolt = getValueMinMax(arrDay, 'volt');
-	const resultDayPower = getPowerMinMax(arrDay);
+  const pureArr = dayData.data;
+  const cloneArr = JSON.parse(JSON.stringify(pureArr));
+  const arrDay = calculateDayValue(sliceHour(cloneArr, pureArr));
+  const resultDayAmp = getValueMinMax(arrDay, 'amp');
+  const resultDayVolt = getValueMinMax(arrDay, 'volt');
+  const resultDayPower = getPowerMinMax(arrDay);
+  //month
+  const monthData = await res_3;
+  //--------------------
 
-	//month
-	const monthData = await res_3;
-	//--------------------
-
-	const pureArr1 = monthData.data;
-	const cloneArr1 = JSON.parse(JSON.stringify(pureArr1));
-	const arrMonth = sliceDay(cloneArr1, pureArr1);
-	const resultMonthAmp = getValueMinMax(arrMonth, 'amp');
-	const resultMonthVolt = getValueMinMax(arrMonth, 'volt');
-	const resultMonthPower = getPowerMinMax(arrMonth);
-
-	const htmlAmp = `
+  const pureArr1 = monthData.data;
+  const cloneArr1 = JSON.parse(JSON.stringify(pureArr1));
+  const arrMonth = calculateMonth(hourInDay(sliceDay(cloneArr1, pureArr1)));
+  const resultMonthAmp = getValueMinMax(arrMonth, 'amp');
+  const resultMonthVolt = getValueMinMax(arrMonth, 'volt');
+  const resultMonthPower = getPowerMinMax(arrMonth);
+  const htmlAmp = `
 	        <tr>
 	            <td class = 'hour'>Hour</td>
 	            <td>
@@ -121,20 +120,20 @@ async function getData() {
 	            <td class = 'day'>Day</td>
 	            <td>
                 <b>
-                    ${resultDayAmp.min[0].toFixed(3)}A
+                    ${resultDayAmp.min.value.toFixed(3)}A
                 </b>
                 - 
                 <i>
-                ${formatTime(resultDayAmp.min[1]).day}
+                ${formatTime(resultDayAmp.min.time).day}
                 </i>
                  </td>
 	            <td>
                 <b>
-                    ${resultDayAmp.max[0].toFixed(3)}A
+                    ${resultDayAmp.max.value.toFixed(3)}A
                 </b>
                 - 
                 <i>
-                ${formatTime(resultDayAmp.max[1]).day}
+                ${formatTime(resultDayAmp.max.time).day}
                 </i>
                  </td>
 	        </tr>
@@ -142,28 +141,28 @@ async function getData() {
 	            <td class = 'month'>Month</td>
 	            <td>
                 <b>
-                    ${resultMonthAmp.min[0].toFixed(3)}A
+                    ${resultMonthAmp.min.value.toFixed(3)}A
                 </b>
                 - 
                 <i>
-                ${formatTime(resultMonthAmp.min[1]).month}
+                ${formatTime(resultMonthAmp.min.time).month}
                 </i>
                  </td>
 	            <td>
                 <b>
-                    ${resultMonthAmp.max[0].toFixed(3)}A
+                    ${resultMonthAmp.max.value.toFixed(3)}A
                 </b>
                 - 
                 <i>
-                ${formatTime(resultMonthAmp.max[1]).month}
+                ${formatTime(resultMonthAmp.max.time).month}
                 </i>
                  </td>
 	        </tr>
 	        
 	`;
-	document.getElementById('tbody-amp').innerHTML = htmlAmp;
-	//Volt
-	const htmlVolt = `
+  document.getElementById('tbody-amp').innerHTML = htmlAmp;
+  //Volt
+  const htmlVolt = `
 	        <tr>
 	            <td class = 'hour'>Hour</td>
 	            <td>
@@ -189,21 +188,21 @@ async function getData() {
 	            <td class = 'day'>Day</td>
 	            <td>
                 <b>
-                ${resultDayVolt.min[0].toFixed(2)}V
+                ${resultDayVolt.min.value.toFixed(2)}V
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultDayVolt.min[1]).day}
+                 ${formatTime(resultDayVolt.min.time).day}
                  </i>
                  
                  </td>
 	            <td>
                 <b>
-                ${resultDayVolt.max[0].toFixed(2)}V
+                ${resultDayVolt.max.value.toFixed(2)}V
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultDayVolt.max[1]).day}
+                 ${formatTime(resultDayVolt.max.time).day}
                  </i>
                  
                  </td>
@@ -212,26 +211,26 @@ async function getData() {
 	            <td class = 'month'>Month</td>
 	            <td>
                 <b>
-                ${resultMonthVolt.min[0].toFixed(2)}V
+                ${resultMonthVolt.min.value.toFixed(2)}V
                 </b>
                 - 
                 <i>
-                ${formatTime(resultMonthVolt.min[1]).month}</td>
+                ${formatTime(resultMonthVolt.min.time).month}</td>
                 </i>
 	            <td>
                 <b>
-                ${resultMonthVolt.max[0].toFixed(2)}V
+                ${resultMonthVolt.max.value.toFixed(2)}V
                 </b>
                 - 
                 <i>
-                ${formatTime(resultMonthVolt.max[1]).month}</td>
+                ${formatTime(resultMonthVolt.max.time).month}</td>
                 </i>
 	        </tr>
 	        
 	`;
-	document.getElementById('tbody-volt').innerHTML = htmlVolt;
-	//power
-	const htmlPower = `
+  document.getElementById('tbody-volt').innerHTML = htmlVolt;
+  //power
+  const htmlPower = `
 	        <tr>
 	            <td class = 'hour'>Hour</td>
 	            <td>
@@ -255,98 +254,87 @@ async function getData() {
 	            <td class = 'day'>Day</td>
 	            <td>
                 <b>
-                ${resultDayPower.min[0].toFixed(2)}W
+                ${resultDayPower.min.value.toFixed(2)}W
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultDayPower.min[1]).day}</td>
+                 ${formatTime(resultDayPower.min.time).day}</td>
                  </i>
 	            <td>
                 <b>
-                ${resultDayPower.max[0].toFixed(2)}W
+                ${resultDayPower.max.value.toFixed(2)}W
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultDayPower.max[1]).day}</td>
+                 ${formatTime(resultDayPower.max.time).day}</td>
                  </i>
 	        </tr>
 	        <tr>
 	            <td class = 'month'>Month</td>
 	            <td>
                 <b>
-                ${resultMonthPower.min[0].toFixed(2)}W
+                ${resultMonthPower.min.value.toFixed(2)}W
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultMonthPower.min[1]).month}</td>
+                 ${formatTime(resultMonthPower.min.time).month}
+              </td>
                  </i>
 	            <td>
                 <b>
-                ${resultMonthPower.max[0].toFixed(2)}W
+                ${resultMonthPower.max.value.toFixed(2)}W
                 </b>
                  - 
                  <i>
-                 ${formatTime(resultMonthPower.max[1]).month}</td>
+                 ${formatTime(resultMonthPower.max.time).month}
                  </i>
 	        </tr>
 	        
 	`;
-	document.getElementById('tbody-power').innerHTML = htmlPower;
+  document.getElementById('tbody-power').innerHTML = htmlPower;
 }
 getData();
 function formatTime(value) {
-	const minute = new Date(value).getMinutes();
-	const hour = new Date(value).getHours();
-	const day = new Date(value).getDate();
-	const month = new Date(value).getMonth();
+  const minute = new Date(value).getMinutes();
+  const hour = new Date(value).getHours();
+  const day = new Date(value).getDate();
+  const month = new Date(value).getMonth();
 
-	return {
-		hour: `${hour}:${minute} ${day}/${month + 1}`,
-		day: `${hour}h ${day}/${month + 1}`,
-		month: `${day}/${month + 1}`,
-	};
+  return {
+    hour: `${hour}:${minute} ${day}/${month + 1}`,
+    day: `${hour}h ${day}/${month + 1}`,
+    month: `${day}/${month + 1}`,
+  };
 }
 
 function getValueMinMax(arr, param) {
-	const arrTotal = arr.map((item) => {
-		let result = item.reduce((total, cur) => {
-			return total + cur[param];
-		}, 0);
-		result = result / item.length;
-		return {
-			result,
-			date: new Date(item[0].createdAt),
-		};
-	});
-	const arrSortTotal = [...arrTotal].sort((a, b) => a.result - b.result);
-
-	return {
-		min: [arrSortTotal[0].result, arrSortTotal[0].date],
-		max: [
-			arrSortTotal[arrSortTotal.length - 1].result,
-			arrSortTotal[arrSortTotal.length - 1].date,
-		],
-	};
+  const arrSortTotal = parseArray(arr).sort((a, b) => a[param] - b[param]);
+  return {
+    min: {
+      value: arrSortTotal[0][param],
+      time: arrSortTotal[0].time,
+    },
+    max: {
+      value: arrSortTotal[arrSortTotal.length - 1][param],
+      time: arrSortTotal[arrSortTotal.length - 1].time,
+    },
+  };
 }
 
 function getPowerMinMax(arr) {
-	const arrTotal = arr.map((item) => {
-		let result = item.reduce((total, cur) => {
-			return total + cur.volt * cur.amp;
-		}, 0);
-		result /= item.length;
-		return {
-			result,
-			date: new Date(item[0].createdAt),
-		};
-	});
-	const arrSortTotal = [...arrTotal].sort((a, b) => a.result - b.result);
+  const resultPower = parseArray(arr).sort((a, b) => a.power - b.power);
+  return {
+    min: {
+      value: resultPower[0].power,
+      time: resultPower[0].time,
+    },
+    max: {
+      value: resultPower[resultPower.length - 1].power,
+      time: resultPower[resultPower.length - 1].time,
+    },
+  };
+}
 
-	return {
-		min: [arrSortTotal[0].result, arrSortTotal[0].date],
-		max: [
-			arrSortTotal[arrSortTotal.length - 1].result,
-			arrSortTotal[arrSortTotal.length - 1].date,
-		],
-	};
+function parseArray(arr) {
+  return JSON.parse(JSON.stringify(arr));
 }

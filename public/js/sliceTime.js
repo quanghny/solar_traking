@@ -46,13 +46,7 @@ function sliceDay(cloneArr, pureArr) {
 
 // For Day
 function sliceHour(cloneArr, pureArr) {
-	/**
-	 *  TOTAL_MINUTES = 60 vì một phút call 1 lần, 1h call 60 lần
-	 *  i < length || cloneArr.length !== 0; vì để kiểm tra xem thử nếu mà i+=60 mà vượt quá length
-	 *  nhưng cloneArr chưa rỗng thì mình phải lặp tiếp để lấy tất cả những phần còn lại
-	 *  1. pureArr[length-1].createdAt < timeline
-	 *    - thì mình sẽ lấy tất cả các phần tử từ đầu đến cuối mảng
-	 */
+
 	const arrHour = [];
 	const length = pureArr.length;
 	const start = new Date(pureArr[0].createdAt);
@@ -75,19 +69,14 @@ function sliceHour(cloneArr, pureArr) {
 		}
 		do {
 			const point = new Date(pureArr[i].createdAt).getTime();
-			//  (point,timeLine)
+		
 			const timeline = new Date(point).setHours(startHour + 1, 0, 0, 0);
-			// point dùng để mượn ngày tháng năm còn hour thì cộng thêm vào nên ở đây có thể thay thế point = start như nhau
-			// vì đều cùng ngày tháng năm
-
-			// -----------| timeLine |------------
-			// -------*---| timeLine |------------ cộng thêm: i++ => isCheckLess = true
-			// -----------| timeLine |-*---------- trừ lại => isCheckGreater = true; i--;
+	
 			if (point < timeline) {
 				isCheckLess = true;
 
 				if (i === length - 1) {
-					// Phần tử cuối cùng nằm trong khoảng thỏa
+			
 					isCheckGreater = true;
 				}
 
@@ -106,5 +95,9 @@ function sliceHour(cloneArr, pureArr) {
 	}
 	return arrHour;
 }
-
-export { sliceDay, sliceHour };
+function hourInDay(arrDay) {
+  return arrDay.map((item) => {
+    return sliceHour(JSON.parse(JSON.stringify(item)), item);
+  });
+}
+export { sliceDay, sliceHour,hourInDay };

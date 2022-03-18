@@ -14,6 +14,43 @@ function calculateHourValue(arrTime) {
 	return arr;
 }
 
+function calculateMonth(arrTime) {
+  const arr = arrTime.map((list) => {
+    //ngay
+    let voltDay = 0;
+    let ampDay = 0;
+    let powerDay = 0;
+    //gio
+    const arrHour = list.map((itemList) => {
+      let voltHour = 0;
+      let ampHour = 0;
+      for (let item of itemList) {
+        voltHour += item.volt;
+        ampHour += item.amp;
+      }
+      voltHour = voltHour / itemList.length;
+      ampHour = ampHour / itemList.length;
+      return {
+        volt: voltHour,
+        amp: ampHour,
+        power: voltHour * ampHour,
+      };
+    });
+    arrHour.forEach((element) => {
+      voltDay += element.volt;
+      ampDay += element.amp;
+      powerDay += element.power;
+    });
+    return {
+      volt: voltDay / arrHour.length,
+      amp: ampDay / arrHour.length,
+      power: powerDay,
+      time: new Date(list[0][0].createdAt).setHours(0, 0, 0, 0),
+    };
+  });
+  return arr;
+}
+
 function calculateMonthValue(arrTime) {
 	const arr = arrTime.map((list) => {
 		let volt = 0;
@@ -238,4 +275,5 @@ export {
 	calculateHourValue,
 	calculateMonthValue,
 	calculateDayValue,
+  calculateMonth
 };
